@@ -2,6 +2,7 @@
   "legalName": "ABC Company Inc.",
   "operatingName": "ABC Solutions",
   "countryCode": "CA",
+  "organizationType": "Business",
   "vendorIdentificationNumbers": {
     "businessNumber": "123456789",
     "supplierNumber": "SUPP-12345",
@@ -12,12 +13,11 @@
       "streetAddress": "123 Main Street",
       "city": "Ottawa",
       "province": "Ontario",
-      "postalCode": "K1A 0A9"
+      "postalCode": "K1A0A9"
     },
     "telephone": "6135551234",
     "email": "contact@abccompany.com"
   },
-  "organizationType": "Business",
   "size": "Medium",
   "aboriginalStatus": false,
   "minorityStatus": false,

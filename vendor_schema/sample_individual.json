@@ -1,0 +1,22 @@
+{
+  "legalName": "John Smith",
+  "countryCode": "CA",
+  "organizationType": "Individual",
+  "vendorIdentificationNumbers": {
+    "sinNumber": "123456789",
+    "supplierNumber": "IND-67890"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "456 Oak Avenue",
+      "city": "Toronto",
+      "province": "Ontario",
+      "postalCode": "M5V2N4"
+    },
+    "telephone": "4165559876",
+    "email": "john.smith@example.com"
+  },
+  "aboriginalStatus": false,
+  "minorityStatus": false,
+  "womenOwnedStatus": false
+}

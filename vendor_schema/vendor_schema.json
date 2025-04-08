@@ -170,13 +170,19 @@
     {
       "if": {
         "properties": {
-          "organizationType": { "enum": ["Individual"] }
+          "organizationType": {
+            "enum": [
+              "Individual"
+            ]
+          }
         }
       },
       "then": {
         "properties": {
           "vendorIdentificationNumbers": {
-            "required": ["sinNumber"]
+            "required": [
+              "sinNumber"
+            ]
           }
         }
       }
@@ -184,14 +190,24 @@
     {
       "if": {
         "properties": {
-          "organizationType": { "enum": ["Business"] },
-          "countryCode": { "enum": ["CA"] }
+          "organizationType": {
+            "enum": [
+              "Business"
+            ]
+          },
+          "countryCode": {
+            "enum": [
+              "CA"
+            ]
+          }
         }
       },
       "then": {
         "properties": {
           "vendorIdentificationNumbers": {
-            "required": ["businessNumber"]
+            "required": [
+              "businessNumber"
+            ]
           }
         }
       }
@@ -199,7 +215,11 @@
     {
       "if": {
         "properties": {
-          "countryCode": { "enum": ["CA"] }
+          "countryCode": {
+            "enum": [
+              "CA"
+            ]
+          }
         }
       },
       "then": {
@@ -221,7 +241,11 @@
     {
       "if": {
         "properties": {
-          "countryCode": { "enum": ["US"] }
+          "countryCode": {
+            "enum": [
+              "US"
+            ]
+          }
         }
       },
       "then": {
