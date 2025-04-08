@@ -7,6 +7,10 @@ This project implements two Treasury Board of Canada standards:
 
 It provides JSON schema validation and sample data for both vendor and customer records in compliance with government requirements.
 
+## Documentation
+- [Vendor Module Documentation](vendor/README.md) - Detailed information about vendor record management
+- [Customer Module Documentation](customer/README.md) - Detailed information about customer record management
+
 ## Purpose
 The tools in this repository ensure that vendor and customer records follow the standardized data structures defined in their respective Treasury Board policies. This standardization helps government departments maintain consistent and interoperable information across systems.
 

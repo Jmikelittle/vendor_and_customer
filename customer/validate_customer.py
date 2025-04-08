@@ -1,6 +1,13 @@
 import json
-import jsonschema
 import os
+
+try:
+    import jsonschema
+except ImportError:
+    print("Error: The jsonschema package is not installed.")
+    print("Please install it using: pip install jsonschema")
+    # You can either exit or provide fallback functionality
+    jsonschema = None
 
 def validate_customer(customer_data):
     """
@@ -13,6 +20,10 @@ def validate_customer(customer_data):
         tuple: (bool, str) - A boolean indicating if the record is valid, 
                and a message providing details on validation result.
     """
+    # Check if jsonschema was successfully imported
+    if jsonschema is None:
+        return False, "Cannot validate: jsonschema package is not installed. Run 'pip install jsonschema' first."
+    
     schema_path = os.path.join(
         os.path.dirname(__file__), 
         "customer_schema", 
