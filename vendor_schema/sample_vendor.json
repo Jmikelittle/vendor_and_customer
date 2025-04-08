@@ -1,0 +1,29 @@
+{
+  "legalName": "ABC Company Inc.",
+  "operatingName": "ABC Solutions",
+  "countryCode": "CA",
+  "vendorIdentificationNumbers": {
+    "businessNumber": "123456789",
+    "supplierNumber": "SUPP-12345",
+    "gstHstNumber": "123456789RT0001"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "123 Main Street",
+      "city": "Ottawa",
+      "province": "Ontario",
+      "postalCode": "K1A 0A9"
+    },
+    "telephone": "6135551234",
+    "email": "contact@abccompany.com"
+  },
+  "organizationType": "Business",
+  "size": "Medium",
+  "aboriginalStatus": false,
+  "minorityStatus": false,
+  "womenOwnedStatus": true,
+  "commodityCodes": [
+    "43211500",
+    "43232400"
+  ]
+}

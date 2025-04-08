@@ -1,7 +1,7 @@
 import json
 import os
 
-# Define JSON Schema for vendor record structure based on Appendix B
+# Define JSON Schema for vendor record structure based on Appendix B of Treasury Board policy
 vendor_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Vendor Record Structure",
@@ -10,7 +10,8 @@ vendor_schema = {
     "required": [
         "legalName",
         "countryCode",
-        "vendorIdentificationNumbers"
+        "vendorIdentificationNumbers",
+        "organizationType"
     ],
     "properties": {
         "legalName": {
@@ -33,9 +34,9 @@ vendor_schema = {
             "description": "Collection of identification numbers",
             "properties": {
                 "businessNumber": {
-                    "description": "Business Number (BN) assigned by CRA",
+                    "description": "Business Number (BN) assigned by CRA - 9 digits for base BN, 15 chars for program account (9 digits + 2 letters + 4 digits)",
                     "type": "string",
-                    "pattern": "^[0-9]{9}$"
+                    "pattern": "^[0-9]{9}([A-Z]{2}[0-9]{4})?$"
                 },
                 "supplierNumber": {
                     "description": "Supplier identification number",
@@ -53,7 +54,13 @@ vendor_schema = {
                 },
                 "qstNumber": {
                     "description": "Quebec Sales Tax Number",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[0-9]{10}TQ[0-9]{4}$"
+                },
+                "sinNumber": {
+                    "description": "Social Insurance Number (SIN) - Only for individuals",
+                    "type": "string",
+                    "pattern": "^[0-9]{9}$"
                 }
             }
         },
@@ -93,7 +100,7 @@ vendor_schema = {
             }
         },
         "organizationType": {
-            "description": "Type of organization",
+            "description": "Vendor Category",
             "type": "string",
             "enum": ["Individual", "Business", "Government", "NGO", "Other"]
         },
@@ -121,31 +128,117 @@ vendor_schema = {
                     "type": "string"
                 },
                 "bankIdentifier": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[0-9]{3}$"
                 },
                 "branchIdentifier": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
                 },
                 "accountNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[0-9]{7,12}$"
                 }
-            }
+            },
+            "required": [
+                "accountHolderName",
+                "bankIdentifier",
+                "branchIdentifier",
+                "accountNumber"
+            ]
         },
         "commodityCodes": {
             "description": "UNSPSC commodity codes",
             "type": "array",
             "items": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^[0-9]{8}$"
             }
         }
-    }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "organizationType": { "enum": ["Individual"] }
+                }
+            },
+            "then": {
+                "properties": {
+                    "vendorIdentificationNumbers": {
+                        "required": ["sinNumber"]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "organizationType": { "enum": ["Business"] },
+                    "countryCode": { "enum": ["CA"] }
+                }
+            },
+            "then": {
+                "properties": {
+                    "vendorIdentificationNumbers": {
+                        "required": ["businessNumber"]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "countryCode": { "enum": ["CA"] }
+                }
+            },
+            "then": {
+                "properties": {
+                    "contactInformation": {
+                        "properties": {
+                            "address": {
+                                "properties": {
+                                    "postalCode": {
+                                        "pattern": "^[A-Z][0-9][A-Z]\\s?[0-9][A-Z][0-9]$"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "countryCode": { "enum": ["US"] }
+                }
+            },
+            "then": {
+                "properties": {
+                    "contactInformation": {
+                        "properties": {
+                            "address": {
+                                "properties": {
+                                    "postalCode": {
+                                        "pattern": "^[0-9]{5}(-[0-9]{4})?$"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
 }
 
-# Create a sample vendor record that would validate against the schema
-sample_vendor = {
+# Create example vendor records for different types
+business_vendor = {
     "legalName": "ABC Company Inc.",
     "operatingName": "ABC Solutions",
     "countryCode": "CA",
+    "organizationType": "Business",
     "vendorIdentificationNumbers": {
         "businessNumber": "123456789",
         "supplierNumber": "SUPP-12345",
@@ -156,17 +249,60 @@ sample_vendor = {
             "streetAddress": "123 Main Street",
             "city": "Ottawa",
             "province": "Ontario",
-            "postalCode": "K1A 0A9"
+            "postalCode": "K1A0A9"
         },
         "telephone": "6135551234",
         "email": "contact@abccompany.com"
     },
-    "organizationType": "Business",
     "size": "Medium",
     "aboriginalStatus": False,
     "minorityStatus": False,
     "womenOwnedStatus": True,
     "commodityCodes": ["43211500", "43232400"]
+}
+
+individual_vendor = {
+    "legalName": "John Smith",
+    "countryCode": "CA",
+    "organizationType": "Individual",
+    "vendorIdentificationNumbers": {
+        "sinNumber": "123456789",
+        "supplierNumber": "IND-67890"
+    },
+    "contactInformation": {
+        "address": {
+            "streetAddress": "456 Oak Avenue",
+            "city": "Toronto",
+            "province": "Ontario",
+            "postalCode": "M5V2N4"
+        },
+        "telephone": "4165559876",
+        "email": "john.smith@example.com"
+    },
+    "aboriginalStatus": False,
+    "minorityStatus": False,
+    "womenOwnedStatus": False
+}
+
+government_vendor = {
+    "legalName": "Department of Innovation",
+    "operatingName": "DOI",
+    "countryCode": "CA",
+    "organizationType": "Government",
+    "vendorIdentificationNumbers": {
+        "businessNumber": "987654321",
+        "supplierNumber": "GOV-54321"
+    },
+    "contactInformation": {
+        "address": {
+            "streetAddress": "789 Government Road",
+            "city": "Ottawa",
+            "province": "Ontario",
+            "postalCode": "K1P5M7"
+        },
+        "telephone": "6135557890",
+        "email": "contact@doi.gc.ca"
+    }
 }
 
 def save_json_files():
@@ -177,9 +313,15 @@ def save_json_files():
     with open("vendor_schema/vendor_schema.json", "w") as schema_file:
         json.dump(vendor_schema, schema_file, indent=2)
     
-    # Save the sample vendor file
+    # Save the sample vendor files
     with open("vendor_schema/sample_vendor.json", "w") as sample_file:
-        json.dump(sample_vendor, sample_file, indent=2)
+        json.dump(business_vendor, sample_file, indent=2)
+    
+    with open("vendor_schema/sample_individual.json", "w", encoding='utf-8') as individual_file:
+        json.dump(individual_vendor, individual_file, indent=2)
+    
+    with open("vendor_schema/sample_government.json", "w", encoding='utf-8') as gov_file:
+        json.dump(government_vendor, gov_file, indent=2)
     
     print("JSON schema and sample files have been created in the 'vendor_schema' directory.")
     
@@ -187,6 +329,10 @@ def save_json_files():
     print("\nTo validate vendor data against this schema, you can use libraries like:")
     print("- jsonschema (Python)")
     print("- Ajv (JavaScript/Node.js)")
+    print("\nNote: Different vendor types require different identification numbers:")
+    print("- Individual vendors require a SIN number (Social Insurance Number)")
+    print("- Canadian businesses require a Business Number")
+    print("- Other identification numbers vary based on organization type and country")
 
 if __name__ == "__main__":
     save_json_files()
