@@ -1,0 +1,15 @@
+{
+  "customerID": "CUST12345",
+  "customerType": "Individual",
+  "contactInformation": {
+    "address": {
+      "streetAddress": "123 Main Street",
+      "city": "Ottawa",
+      "province": "Ontario",
+      "postalCode": "K1A 0A9",
+      "country": "CA"
+    },
+    "telephone": "6135551234",
+    "email": "customer@example.com"
+  }
+}

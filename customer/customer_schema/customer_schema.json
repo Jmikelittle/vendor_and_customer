@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer Record Structure",
+  "description": "Data elements based on Treasury Board of Canada's Standard on Customer Record",
+  "type": "object",
+  "required": [
+    "customerID",
+    "customerType"
+  ],
+  "properties": {
+    "customerID": {
+      "description": "Unique identifier for the customer",
+      "type": "string"
+    },
+    "customerType": {
+      "description": "Type of customer",
+      "type": "string",
+      "enum": [
+        "Individual",
+        "Business",
+        "Organization",
+        "Government"
+      ]
+    },
+    "contactInformation": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "object",
+          "properties": {
+            "streetAddress": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "city": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "province": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "postalCode": {
+              "type": "string",
+              "maxLength": 10
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          },
+          "required": [
+            "streetAddress",
+            "city",
+            "country"
+          ]
+        },
+        "telephone": {
+          "type": "string",
+          "pattern": "^[0-9]{10,15}$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      }
+    }
+  }
+}
