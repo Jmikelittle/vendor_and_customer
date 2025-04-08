@@ -58,9 +58,13 @@ vendor_schema = {
                     "pattern": "^[0-9]{10}TQ[0-9]{4}$"
                 },
                 "sinNumber": {
-                    "description": "Social Insurance Number (SIN) - Only for individuals",
+                    "description": "Social Insurance Number (SIN) - One option for individuals",
                     "type": "string",
                     "pattern": "^[0-9]{9}$"
+                },
+                "uniqueIdentifier": {
+                    "description": "Any unique numeric identifier for individuals",
+                    "type": "string"
                 }
             }
         },
@@ -100,9 +104,15 @@ vendor_schema = {
             }
         },
         "organizationType": {
-            "description": "Vendor Category",
+            "description": "Vendor Category as defined in Appendix B",
             "type": "string",
-            "enum": ["Individual", "Business", "Government", "NGO", "Other"]
+            "enum": [
+                "Individual", 
+                "Corporation/Partnership", 
+                "Employee", 
+                "Other Government Department", 
+                "Other Government"
+            ]
         },
         "size": {
             "description": "Size of the organization",
@@ -166,7 +176,11 @@ vendor_schema = {
             "then": {
                 "properties": {
                     "vendorIdentificationNumbers": {
-                        "required": ["sinNumber"]
+                        "anyOf": [
+                            { "required": ["uniqueIdentifier"] },
+                            { "required": ["sinNumber"] },
+                            { "required": ["businessNumber"] }
+                        ]
                     }
                 }
             }
@@ -174,7 +188,7 @@ vendor_schema = {
         {
             "if": {
                 "properties": {
-                    "organizationType": { "enum": ["Business"] },
+                    "organizationType": { "enum": ["Corporation/Partnership"] },
                     "countryCode": { "enum": ["CA"] }
                 }
             },
@@ -234,11 +248,11 @@ vendor_schema = {
 }
 
 # Create example vendor records for different types
-business_vendor = {
+corporation_vendor = {
     "legalName": "ABC Company Inc.",
     "operatingName": "ABC Solutions",
     "countryCode": "CA",
-    "organizationType": "Business",
+    "organizationType": "Corporation/Partnership",
     "vendorIdentificationNumbers": {
         "businessNumber": "123456789",
         "supplierNumber": "SUPP-12345",
@@ -266,7 +280,7 @@ individual_vendor = {
     "countryCode": "CA",
     "organizationType": "Individual",
     "vendorIdentificationNumbers": {
-        "sinNumber": "123456789",
+        "uniqueIdentifier": "ID12345678",
         "supplierNumber": "IND-67890"
     },
     "contactInformation": {
@@ -284,11 +298,36 @@ individual_vendor = {
     "womenOwnedStatus": False
 }
 
-government_vendor = {
+sole_proprietor = {
+    "legalName": "Jane's Consulting",
+    "operatingName": "JC Consulting",
+    "countryCode": "CA",
+    "organizationType": "Individual",
+    "vendorIdentificationNumbers": {
+        "businessNumber": "987654321",
+        "supplierNumber": "SP-12345"
+    },
+    "contactInformation": {
+        "address": {
+            "streetAddress": "789 Birch Street",
+            "city": "Montreal",
+            "province": "Quebec",
+            "postalCode": "H2X1Y6"
+        },
+        "telephone": "5145556789",
+        "email": "jane@jcconsulting.ca"
+    },
+    "size": "Small",
+    "aboriginalStatus": False,
+    "minorityStatus": False,
+    "womenOwnedStatus": True
+}
+
+ogd_vendor = {
     "legalName": "Department of Innovation",
     "operatingName": "DOI",
     "countryCode": "CA",
-    "organizationType": "Government",
+    "organizationType": "Other Government Department",
     "vendorIdentificationNumbers": {
         "businessNumber": "987654321",
         "supplierNumber": "GOV-54321"
@@ -305,6 +344,26 @@ government_vendor = {
     }
 }
 
+employee_vendor = {
+    "legalName": "Alex Johnson",
+    "countryCode": "CA",
+    "organizationType": "Employee",
+    "vendorIdentificationNumbers": {
+        "uniqueIdentifier": "EMP123456",
+        "supplierNumber": "EMP-54321"
+    },
+    "contactInformation": {
+        "address": {
+            "streetAddress": "123 Employee Drive",
+            "city": "Ottawa",
+            "province": "Ontario",
+            "postalCode": "K2P1X3"
+        },
+        "telephone": "6139995555",
+        "email": "alex.johnson@gc.ca"
+    }
+}
+
 def save_json_files():
     # Create a directory for the schema files if it doesn't exist
     os.makedirs("vendor_schema", exist_ok=True)
@@ -315,13 +374,19 @@ def save_json_files():
     
     # Save the sample vendor files
     with open("vendor_schema/sample_vendor.json", "w") as sample_file:
-        json.dump(business_vendor, sample_file, indent=2)
+        json.dump(corporation_vendor, sample_file, indent=2)
     
     with open("vendor_schema/sample_individual.json", "w", encoding='utf-8') as individual_file:
         json.dump(individual_vendor, individual_file, indent=2)
     
-    with open("vendor_schema/sample_government.json", "w", encoding='utf-8') as gov_file:
-        json.dump(government_vendor, gov_file, indent=2)
+    with open("vendor_schema/sample_sole_proprietor.json", "w", encoding='utf-8') as sp_file:
+        json.dump(sole_proprietor, sp_file, indent=2)
+    
+    with open("vendor_schema/sample_ogd.json", "w", encoding='utf-8') as ogd_file:
+        json.dump(ogd_vendor, ogd_file, indent=2)
+    
+    with open("vendor_schema/sample_employee.json", "w", encoding='utf-8') as emp_file:
+        json.dump(employee_vendor, emp_file, indent=2)
     
     print("JSON schema and sample files have been created in the 'vendor_schema' directory.")
     
@@ -329,10 +394,10 @@ def save_json_files():
     print("\nTo validate vendor data against this schema, you can use libraries like:")
     print("- jsonschema (Python)")
     print("- Ajv (JavaScript/Node.js)")
-    print("\nNote: Different vendor types require different identification numbers:")
-    print("- Individual vendors require a SIN number (Social Insurance Number)")
-    print("- Canadian businesses require a Business Number")
-    print("- Other identification numbers vary based on organization type and country")
+    print("\nNote: Different vendor categories require different identification numbers:")
+    print("- Individuals can use a unique identifier, SIN, or business number (for sole proprietors)")
+    print("- Canadian Corporations/Partnerships require a Business Number")
+    print("- Government entities and employees have their own identification requirements")
 
 if __name__ == "__main__":
     save_json_files()

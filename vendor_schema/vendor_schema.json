@@ -54,9 +54,13 @@
           "pattern": "^[0-9]{10}TQ[0-9]{4}$"
         },
         "sinNumber": {
-          "description": "Social Insurance Number (SIN) - Only for individuals",
+          "description": "Social Insurance Number (SIN) - One option for individuals",
           "type": "string",
           "pattern": "^[0-9]{9}$"
+        },
+        "uniqueIdentifier": {
+          "description": "Any unique numeric identifier for individuals",
+          "type": "string"
         }
       }
     },
@@ -100,14 +104,14 @@
       }
     },
     "organizationType": {
-      "description": "Vendor Category",
+      "description": "Vendor Category as defined in Appendix B",
       "type": "string",
       "enum": [
-        "Individual",
-        "Business",
-        "Government",
-        "NGO",
-        "Other"
+        "Individual", 
+        "Corporation/Partnership", 
+        "Employee", 
+        "Other Government Department", 
+        "Other Government"
       ]
     },
     "size": {
@@ -170,18 +174,16 @@
     {
       "if": {
         "properties": {
-          "organizationType": {
-            "enum": [
-              "Individual"
-            ]
-          }
+          "organizationType": { "enum": ["Individual"] }
         }
       },
       "then": {
         "properties": {
           "vendorIdentificationNumbers": {
-            "required": [
-              "sinNumber"
+            "anyOf": [
+              { "required": ["uniqueIdentifier"] },
+              { "required": ["sinNumber"] },
+              { "required": ["businessNumber"] }
             ]
           }
         }
@@ -190,24 +192,14 @@
     {
       "if": {
         "properties": {
-          "organizationType": {
-            "enum": [
-              "Business"
-            ]
-          },
-          "countryCode": {
-            "enum": [
-              "CA"
-            ]
-          }
+          "organizationType": { "enum": ["Corporation/Partnership"] },
+          "countryCode": { "enum": ["CA"] }
         }
       },
       "then": {
         "properties": {
           "vendorIdentificationNumbers": {
-            "required": [
-              "businessNumber"
-            ]
+            "required": ["businessNumber"]
           }
         }
       }
@@ -215,11 +207,7 @@
     {
       "if": {
         "properties": {
-          "countryCode": {
-            "enum": [
-              "CA"
-            ]
-          }
+          "countryCode": { "enum": ["CA"] }
         }
       },
       "then": {
@@ -241,11 +229,7 @@
     {
       "if": {
         "properties": {
-          "countryCode": {
-            "enum": [
-              "US"
-            ]
-          }
+          "countryCode": { "enum": ["US"] }
         }
       },
       "then": {
