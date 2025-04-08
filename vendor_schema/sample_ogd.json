@@ -1,0 +1,21 @@
+{
+  "legalName": "Department of Innovation",
+  "operatingName": "DOI",
+  "countryCode": "CA",
+  "organizationType": "Other Government Department",
+  "taxRecipientType": "",
+  "vendorIdentificationNumbers": {
+    "businessNumber": "987654321",
+    "supplierNumber": "GOV-54321"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "789 Government Road",
+      "city": "Ottawa",
+      "province": "Ontario",
+      "postalCode": "K1P5M7"
+    },
+    "telephone": "6135557890",
+    "email": "contact@doi.gc.ca"
+  }
+}

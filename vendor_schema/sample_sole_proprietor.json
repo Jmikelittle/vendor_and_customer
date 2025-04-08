@@ -1,0 +1,25 @@
+{
+  "legalName": "Jane's Consulting",
+  "operatingName": "JC Consulting",
+  "countryCode": "CA",
+  "organizationType": "Individual",
+  "taxRecipientType": "1",
+  "vendorIdentificationNumbers": {
+    "businessNumber": "987654321",
+    "supplierNumber": "SP-12345"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "789 Birch Street",
+      "city": "Montreal",
+      "province": "Quebec",
+      "postalCode": "H2X1Y6"
+    },
+    "telephone": "5145556789",
+    "email": "jane@jcconsulting.ca"
+  },
+  "size": "Small",
+  "aboriginalStatus": false,
+  "minorityStatus": false,
+  "womenOwnedStatus": true
+}

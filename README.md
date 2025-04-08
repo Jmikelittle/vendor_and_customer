@@ -15,6 +15,7 @@ The tools in this repository ensure that vendor records follow the standardized 
   - Other Government Department (OGD)
   - Other Government
 - Flexible identification number requirements based on vendor category
+- CRA Tax Recipient Type code validation
 - Country-specific validation for address formats
 - Sample vendor records for all vendor categories
 
@@ -26,6 +27,7 @@ The tools in this repository ensure that vendor records follow the standardized 
   - `sample_vendor.json` - Example of a Corporation/Partnership vendor
   - `sample_individual.json` - Example of an Individual vendor
   - `sample_sole_proprietor.json` - Example of a Sole Proprietor (Individual with business number)
+  - `sample_partnership.json` - Example of a Partnership vendor
   - `sample_ogd.json` - Example of an Other Government Department vendor
   - `sample_employee.json` - Example of an Employee vendor
 
@@ -59,6 +61,16 @@ Different vendor categories require different identification numbers as per Appe
 | Employee | Unique identifier within the department |
 | Other Government Department | Department identifier |
 | Other Government | Appropriate government identifier |
+
+## Tax Recipient Type
+The CRA-assigned Tax Recipient Type code is used for tax purposes and forms. The schema includes validation for these codes:
+
+| Code | Description | Applicable To |
+|------|-------------|--------------|
+| "1" | Individual sole proprietor | Individuals |
+| "3" | Corporation | Corporations |
+| "4" | Partnership, association, trust, estate or other | Partnerships, etc. |
+| "" (blank) | For entities without an assigned type or for non-taxable vendor records | Government entities, employees, or vendors for grants/contributions |
 
 ## License
 See the LICENSE file for details.

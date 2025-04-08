@@ -114,6 +114,12 @@ vendor_schema = {
                 "Other Government"
             ]
         },
+        "taxRecipientType": {
+            "description": "CRA-assigned Tax Recipient Type code identifying if the recipient of a taxable form is a public or private entity, non-resident, individual or employee",
+            "type": "string",
+            "enum": ["1", "3", "4", ""],
+            "default": ""
+        },
         "size": {
             "description": "Size of the organization",
             "type": "string",
@@ -181,6 +187,23 @@ vendor_schema = {
                             { "required": ["sinNumber"] },
                             { "required": ["businessNumber"] }
                         ]
+                    },
+                    "taxRecipientType": {
+                        "enum": ["1", ""]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "organizationType": { "enum": ["Corporation/Partnership"] }
+                }
+            },
+            "then": {
+                "properties": {
+                    "taxRecipientType": {
+                        "enum": ["3", "4", ""]
                     }
                 }
             }
@@ -253,6 +276,7 @@ corporation_vendor = {
     "operatingName": "ABC Solutions",
     "countryCode": "CA",
     "organizationType": "Corporation/Partnership",
+    "taxRecipientType": "3",  # Corporation
     "vendorIdentificationNumbers": {
         "businessNumber": "123456789",
         "supplierNumber": "SUPP-12345",
@@ -279,6 +303,7 @@ individual_vendor = {
     "legalName": "John Smith",
     "countryCode": "CA",
     "organizationType": "Individual",
+    "taxRecipientType": "1",  # Individual
     "vendorIdentificationNumbers": {
         "uniqueIdentifier": "ID12345678",
         "supplierNumber": "IND-67890"
@@ -303,6 +328,7 @@ sole_proprietor = {
     "operatingName": "JC Consulting",
     "countryCode": "CA",
     "organizationType": "Individual",
+    "taxRecipientType": "1",  # Individual sole proprietor
     "vendorIdentificationNumbers": {
         "businessNumber": "987654321",
         "supplierNumber": "SP-12345"
@@ -323,11 +349,38 @@ sole_proprietor = {
     "womenOwnedStatus": True
 }
 
+partnership_vendor = {
+    "legalName": "XYZ Partners LLP",
+    "operatingName": "XYZ Advisory",
+    "countryCode": "CA",
+    "organizationType": "Corporation/Partnership",
+    "taxRecipientType": "4",  # Partnership
+    "vendorIdentificationNumbers": {
+        "businessNumber": "456789123",
+        "supplierNumber": "PART-6789"
+    },
+    "contactInformation": {
+        "address": {
+            "streetAddress": "555 Partner Avenue",
+            "city": "Vancouver", 
+            "province": "British Columbia",
+            "postalCode": "V6B5K3"
+        },
+        "telephone": "6045557890",
+        "email": "info@xyzpartners.ca"
+    },
+    "size": "Medium",
+    "aboriginalStatus": False,
+    "minorityStatus": False,
+    "womenOwnedStatus": False
+}
+
 ogd_vendor = {
     "legalName": "Department of Innovation",
     "operatingName": "DOI",
     "countryCode": "CA",
     "organizationType": "Other Government Department",
+    "taxRecipientType": "",  # Left blank as per guidance
     "vendorIdentificationNumbers": {
         "businessNumber": "987654321",
         "supplierNumber": "GOV-54321"
@@ -348,6 +401,7 @@ employee_vendor = {
     "legalName": "Alex Johnson",
     "countryCode": "CA",
     "organizationType": "Employee",
+    "taxRecipientType": "",  # Left blank for employees
     "vendorIdentificationNumbers": {
         "uniqueIdentifier": "EMP123456",
         "supplierNumber": "EMP-54321"
@@ -369,11 +423,11 @@ def save_json_files():
     os.makedirs("vendor_schema", exist_ok=True)
     
     # Save the schema file
-    with open("vendor_schema/vendor_schema.json", "w") as schema_file:
+    with open("vendor_schema/vendor_schema.json", "w", encoding='utf-8') as schema_file:
         json.dump(vendor_schema, schema_file, indent=2)
     
     # Save the sample vendor files
-    with open("vendor_schema/sample_vendor.json", "w") as sample_file:
+    with open("vendor_schema/sample_vendor.json", "w", encoding='utf-8') as sample_file:
         json.dump(corporation_vendor, sample_file, indent=2)
     
     with open("vendor_schema/sample_individual.json", "w", encoding='utf-8') as individual_file:
@@ -381,6 +435,9 @@ def save_json_files():
     
     with open("vendor_schema/sample_sole_proprietor.json", "w", encoding='utf-8') as sp_file:
         json.dump(sole_proprietor, sp_file, indent=2)
+    
+    with open("vendor_schema/sample_partnership.json", "w", encoding='utf-8') as part_file:
+        json.dump(partnership_vendor, part_file, indent=2)
     
     with open("vendor_schema/sample_ogd.json", "w", encoding='utf-8') as ogd_file:
         json.dump(ogd_vendor, ogd_file, indent=2)
@@ -397,7 +454,8 @@ def save_json_files():
     print("\nNote: Different vendor categories require different identification numbers:")
     print("- Individuals can use a unique identifier, SIN, or business number (for sole proprietors)")
     print("- Canadian Corporations/Partnerships require a Business Number")
-    print("- Government entities and employees have their own identification requirements")
+    print("- Tax Recipient Type codes: '1' for individuals/sole proprietors, '3' for corporations, '4' for partnerships")
+    print("- Government entities and employees typically leave Tax Recipient Type blank")
 
 if __name__ == "__main__":
     save_json_files()

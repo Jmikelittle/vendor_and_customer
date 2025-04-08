@@ -1,0 +1,20 @@
+{
+  "legalName": "Alex Johnson",
+  "countryCode": "CA",
+  "organizationType": "Employee",
+  "taxRecipientType": "",
+  "vendorIdentificationNumbers": {
+    "uniqueIdentifier": "EMP123456",
+    "supplierNumber": "EMP-54321"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "123 Employee Drive",
+      "city": "Ottawa",
+      "province": "Ontario",
+      "postalCode": "K2P1X3"
+    },
+    "telephone": "6139995555",
+    "email": "alex.johnson@gc.ca"
+  }
+}

@@ -2,8 +2,9 @@
   "legalName": "John Smith",
   "countryCode": "CA",
   "organizationType": "Individual",
+  "taxRecipientType": "1",
   "vendorIdentificationNumbers": {
-    "sinNumber": "123456789",
+    "uniqueIdentifier": "ID12345678",
     "supplierNumber": "IND-67890"
   },
   "contactInformation": {

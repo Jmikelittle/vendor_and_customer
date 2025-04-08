@@ -2,7 +2,8 @@
   "legalName": "ABC Company Inc.",
   "operatingName": "ABC Solutions",
   "countryCode": "CA",
-  "organizationType": "Business",
+  "organizationType": "Corporation/Partnership",
+  "taxRecipientType": "3",
   "vendorIdentificationNumbers": {
     "businessNumber": "123456789",
     "supplierNumber": "SUPP-12345",

@@ -1,0 +1,25 @@
+{
+  "legalName": "XYZ Partners LLP",
+  "operatingName": "XYZ Advisory",
+  "countryCode": "CA",
+  "organizationType": "Corporation/Partnership",
+  "taxRecipientType": "4",
+  "vendorIdentificationNumbers": {
+    "businessNumber": "456789123",
+    "supplierNumber": "PART-6789"
+  },
+  "contactInformation": {
+    "address": {
+      "streetAddress": "555 Partner Avenue",
+      "city": "Vancouver",
+      "province": "British Columbia",
+      "postalCode": "V6B5K3"
+    },
+    "telephone": "6045557890",
+    "email": "info@xyzpartners.ca"
+  },
+  "size": "Medium",
+  "aboriginalStatus": false,
+  "minorityStatus": false,
+  "womenOwnedStatus": false
+}
